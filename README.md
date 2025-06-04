@@ -1,37 +1,111 @@
 # Modern Calculator
 
-A beautiful and functional calculator with both desktop and web versions.
+A beautiful and easy-to-use calculator with both web and desktop versions. Features a modern UI, keyboard support, and advanced calculation capabilities.
 
-## Quick Start (No Installation Required)
-
-1. Download `ModernCalculator.exe` from the releases
-2. Double-click to run - that's it!
+![Calculator Preview](website/images/preview.png)
 
 ## Features
 
-- Clean, modern interface
-- Basic arithmetic operations
-- Percentage calculations
-- Keyboard support
-- No installation needed
-- Works on Windows
+- 🎨 Modern, gradient-based design
+- ⌨️ Full keyboard support
+- 📱 Responsive layout for all devices
+- 🧮 Advanced calculation features
+- 💾 Available for Windows and Android
+- 🌐 Web version accessible anywhere
 
-## Web Version
+## Try It Online
 
-Visit our website to:
-- Use the calculator online
-- Download the desktop version
-- Get support
+Visit our website to try the calculator online: [Modern Calculator Web](https://yourusername.github.io/modern-calculator)
 
-## For Developers
+## Downloads
 
-If you want to run the source code directly:
+- [Windows Version](https://github.com/yourusername/modern-calculator/releases/latest/download/ModernCalculator-Windows.zip)
+- [Android Version](https://github.com/yourusername/modern-calculator/releases/latest/download/ModernCalculator.apk)
 
-1. Install Python from python.org
-2. Clone this repository
-3. Install requirements: `pip install -r requirements.txt`
-4. Run `python calculator.py`
+## Development Setup
 
-## Support
+### Prerequisites
 
-Need help? Found a bug? Please open an issue on GitHub.
+- Python 3.8 or higher
+- Node.js 14+ (for web development)
+- Android Studio (for Android development)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/modern-calculator.git
+   cd modern-calculator
+   ```
+
+2. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the web version locally:
+   ```bash
+   python -m http.server 8000 --directory website
+   ```
+
+4. Build packages:
+   ```bash
+   ./create_packages.bat  # Windows
+   ./create_packages.sh   # Linux/Mac
+   ```
+
+### Building Mobile Version
+
+1. Open the project in Android Studio:
+   ```bash
+   cd android
+   ./gradlew assembleDebug
+   ```
+
+2. The APK will be generated in `android/app/build/outputs/apk/debug/`
+
+## Project Structure
+
+```
+modern-calculator/
+├── website/              # Web version
+│   ├── css/             # Stylesheets
+│   ├── js/              # JavaScript files
+│   ├── images/          # Icons and images
+│   └── downloads/       # Application packages
+├── android/             # Android app source
+├── calculator.py        # Desktop version
+└── create_packages.bat  # Build script
+```
+
+## Keyboard Shortcuts
+
+- `0-9`: Number input
+- `.`: Decimal point
+- `+`, `-`, `*`, `/`: Operators
+- `Enter` or `=`: Calculate
+- `Escape`: Clear
+- `Backspace`: Delete last digit
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Icons and gradients inspired by modern design trends
+- Built with love for the open-source community
+
+## Contact
+
+Your Name - [@yourusername](https://twitter.com/yourusername)
+
+Project Link: [https://github.com/yourusername/modern-calculator](https://github.com/yourusername/modern-calculator)

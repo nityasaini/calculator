@@ -2,16 +2,18 @@
 <html>
 <head>
     <title>Download Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             text-align: center;
+            padding: 20px;
         }
         .message {
             background: white;
@@ -43,7 +45,7 @@
             padding: 12px 24px;
             border-radius: 5px;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: all 0.3s;
             min-width: 200px;
         }
         .download-button.windows {
@@ -75,6 +77,28 @@
             margin: 15px 0;
             padding: 10px;
             border-radius: 5px;
+            display: none;
+        }
+        .platform-section.active {
+            display: block;
+        }
+        #loading {
+            display: none;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 10px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -84,63 +108,89 @@
         <p>Choose your platform:</p>
         
         <div class="download-options">
-            <a href="ModernCalculator.exe" download class="download-button windows">
+            <a href="releases/ModernCalculator-Windows.zip" class="download-button windows" id="windows-download">
                 <div class="platform-icon">🪟</div>
                 Windows Version<br>
                 <small>No installation needed</small>
             </a>
-            <a href="ModernCalculator.apk" download class="download-button android">
+            <a href="releases/ModernCalculator.apk" class="download-button android" id="android-download">
                 <div class="platform-icon">📱</div>
                 Android Version<br>
                 <small>APK file</small>
             </a>
-            <a href="ModernCalculator.zip" download class="download-button source">
+            <a href="releases/ModernCalculator-Source.zip" class="download-button source">
                 <div class="platform-icon">💻</div>
                 Source Code<br>
                 <small>For developers</small>
             </a>
         </div>
 
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Starting download...</p>
+        </div>
+
         <div class="note">
-            <div class="platform-section">
+            <div class="platform-section" id="android-instructions">
                 <h3>📱 Android Installation:</h3>
                 <ol>
-                    <li>Download ModernCalculator.apk</li>
-                    <li>Enable "Install from Unknown Sources" in Settings</li>
-                    <li>Tap the APK file to install</li>
-                    <li>Open from your app drawer</li>
+                    <li>The APK will download automatically</li>
+                    <li>Tap the downloaded file to install</li>
+                    <li>If blocked, enable "Install Unknown Apps"</li>
+                    <li>Open the calculator from your app drawer</li>
                 </ol>
             </div>
 
-            <div class="platform-section">
+            <div class="platform-section" id="windows-instructions">
                 <h3>🪟 Windows Installation:</h3>
                 <ol>
-                    <li>Download ModernCalculator.exe</li>
-                    <li>Double-click to run - that's it!</li>
+                    <li>The ZIP file will download automatically</li>
+                    <li>Extract all files to a folder</li>
+                    <li>Open the folder and double-click Calculator.exe</li>
+                    <li>That's it! No Python needed</li>
                 </ol>
             </div>
         </div>
     </div>
     <script>
-        // Detect platform and suggest appropriate download
+        // Detect platform
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        
+        // Show appropriate instructions
+        showInstructions(isAndroid ? 'android' : 'windows');
+        
+        function showInstructions(platform) {
+            document.querySelectorAll('.platform-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(platform + '-instructions').classList.add('active');
+        }
+
+        // Handle downloads
+        document.querySelectorAll('.download-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Don't auto-download if clicking source code
+                if (button.classList.contains('source')) return;
+                
+                // Don't auto-download wrong platform
+                if (isAndroid && button.classList.contains('windows')) return;
+                if (!isAndroid && button.classList.contains('android')) return;
+                
+                document.getElementById('loading').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 3000);
+            });
+        });
+
+        // Auto-download appropriate version
         window.onload = function() {
-            var userAgent = navigator.userAgent.toLowerCase();
-            var isAndroid = userAgent.indexOf("android") > -1;
-            
-            // Create download link
-            var link = document.createElement('a');
+            // Don't auto-download on desktop if user agent suggests it's a mobile browser
             if (isAndroid) {
-                link.href = 'ModernCalculator.apk';
-                link.download = 'ModernCalculator.apk';
-            } else {
-                link.href = 'ModernCalculator.exe';
-                link.download = 'ModernCalculator.exe';
+                document.getElementById('android-download').click();
+            } else if (!/Mobile|Android|iPhone/i.test(navigator.userAgent)) {
+                document.getElementById('windows-download').click();
             }
-            
-            // Trigger download
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         };
     </script>
 </body>

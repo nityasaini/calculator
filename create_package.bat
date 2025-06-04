@@ -1,32 +1,25 @@
 @echo off
-echo Checking required files...
+echo Creating Modern Calculator Package...
 
-if not exist "calculator.py" (
-    echo Error: calculator.py not found!
-    pause
-    exit /b 1
-)
+REM Create dist directory if it doesn't exist
+if not exist "dist" mkdir dist
+if not exist "releases" mkdir releases
 
-if not exist "Launch Calculator.vbs" (
-    echo Error: Launch Calculator.vbs not found!
-    pause
-    exit /b 1
-)
+REM Install required packages
+pip install pyinstaller pillow cairosvg
 
-if not exist "setup.vbs" (
-    echo Error: setup.vbs not found!
-    pause
-    exit /b 1
-)
+REM Convert SVG to ICO using Python
+echo Converting icon...
+python -c "from cairosvg import svg2png; from PIL import Image; svg2png(url='icon.svg', write_to='temp.png', output_width=256, output_height=256); img = Image.open('temp.png'); img.save('icon.ico', sizes=[(256, 256), (128, 128), (64, 64), (32, 32), (16, 16)]); import os; os.remove('temp.png')"
 
-echo All files found. Creating package...
-powershell -Command "Compress-Archive -Force -Path 'calculator.py','Launch Calculator.vbs','setup.vbs' -DestinationPath 'ModernCalculator.zip'"
+REM Create executable
+echo Creating executable...
+pyinstaller --noconfirm --onefile --windowed --icon=icon.ico --name="Calculator" calculator.py
 
-if %ERRORLEVEL% EQU 0 (
-    echo Package created successfully!
-    echo The zip file is located at: %CD%\ModernCalculator.zip
-) else (
-    echo Error creating package! Error code: %ERRORLEVEL%
-)
+REM Create release package
+echo Creating ZIP package...
+powershell Compress-Archive -Force -Path "dist\Calculator.exe", "README.md", "Launch Calculator.bat" -DestinationPath "releases\ModernCalculator-Windows.zip"
 
+echo Package created successfully!
+echo Location: releases\ModernCalculator-Windows.zip
 pause 
