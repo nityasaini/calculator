@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-import math
 
 class Calculator:
     def __init__(self, root):
@@ -17,6 +16,9 @@ class Calculator:
         self.result_var.set("0")
         self.current_expression = ""
         
+        # Bind keyboard events to the main window
+        self.root.bind('<KeyPress>', self.on_key_press)
+        
         self.create_widgets()
         
     def create_widgets(self):
@@ -24,14 +26,14 @@ class Calculator:
         display_frame = tk.Frame(self.root, bg="#f0f0f0")
         display_frame.pack(fill=tk.BOTH, padx=20, pady=20)
         
-        result_label = tk.Label(
+        self.result_label = tk.Label(
             display_frame,
             textvariable=self.result_var,
             font=('Helvetica', 40),
             anchor="e",
             bg="#f0f0f0"
         )
-        result_label.pack(fill=tk.BOTH)
+        self.result_label.pack(fill=tk.BOTH)
         
         # Buttons
         buttons_frame = tk.Frame(self.root, bg="#f0f0f0")
@@ -70,10 +72,38 @@ class Calculator:
                 command=lambda x=text: self.button_click(x)
             )
             btn.grid(row=row, column=col, columnspan=colspan, padx=5, pady=5, sticky="nsew")
+
+    def on_key_press(self, event):
+        key = event.char
+        keysym = event.keysym
+        
+        # Handle numeric keys and decimal point
+        if key.isdigit() or key == '.':
+            self.button_click(key)
+            
+        # Handle operators
+        elif key in ['+', '-']:
+            self.button_click(key)
+        elif key == '*':
+            self.button_click('×')
+        elif key == '/':
+            self.button_click('÷')
+            
+        # Handle special keys
+        elif keysym == 'Return':
+            self.button_click('=')
+        elif keysym == 'Escape':
+            self.button_click('C')
+        elif keysym == 'BackSpace':
+            if self.current_expression:
+                self.current_expression = self.current_expression[:-1]
+                if not self.current_expression:
+                    self.current_expression = "0"
+                self.result_var.set(self.current_expression)
     
     def button_click(self, value):
         if value == 'C':
-            self.current_expression = ""
+            self.current_expression = "0"
             self.result_var.set("0")
         elif value == '=':
             try:
@@ -87,24 +117,27 @@ class Calculator:
                 self.current_expression = str(result)
             except:
                 self.result_var.set("Error")
-                self.current_expression = ""
+                self.current_expression = "0"
         elif value == '±':
             try:
-                current = float(self.result_var.get())
-                self.result_var.set(str(-current))
+                current = float(self.current_expression)
                 self.current_expression = str(-current)
+                self.result_var.set(self.current_expression)
             except:
                 pass
         elif value == '%':
             try:
-                current = float(self.result_var.get())
-                result = current / 100
-                self.result_var.set(str(result))
-                self.current_expression = str(result)
+                current = float(self.current_expression)
+                self.current_expression = str(current / 100)
+                self.result_var.set(self.current_expression)
             except:
                 pass
         else:
-            self.current_expression += value
+            # Handle initial zero
+            if self.current_expression == "0" and value not in ['.', '+', '-', '×', '÷']:
+                self.current_expression = value
+            else:
+                self.current_expression += value
             self.result_var.set(self.current_expression)
 
 if __name__ == "__main__":
