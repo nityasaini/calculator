@@ -6,9 +6,6 @@ from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
 
-# Set app dimensions
-Window.size = (400, 600)
-
 # Define the UI style
 Builder.load_string('''
 <CalculatorLayout>:
@@ -31,6 +28,7 @@ Builder.load_string('''
         background_color: 1, 1, 1, 1
         foreground_color: 0.17, 0.24, 0.31, 1
         size_hint_y: 0.2
+        text: '0'
         
     GridLayout:
         cols: 4
