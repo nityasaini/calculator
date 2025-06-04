@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Downloading Calculator...</title>
+    <title>Download Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +18,8 @@
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
         }
         h1 {
             color: #2c3e50;
@@ -25,21 +27,117 @@
         }
         p {
             color: #7f8c8d;
+            line-height: 1.6;
+        }
+        .download-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .download-button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s;
+            min-width: 200px;
+        }
+        .download-button.windows {
+            background: #2ecc71;
+        }
+        .download-button.android {
+            background: #9b59b6;
+        }
+        .download-button.source {
+            background: #34495e;
+        }
+        .download-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .platform-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .note {
+            font-size: 0.9em;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .platform-section {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="message">
-        <h1>Downloading Calculator...</h1>
-        <p>Your download should start automatically.</p>
-        <p>If it doesn't, <a href="CalculatorSetup.bat" download>click here</a>.</p>
+        <h1>Download Modern Calculator</h1>
+        <p>Choose your platform:</p>
+        
+        <div class="download-options">
+            <a href="ModernCalculator.exe" download class="download-button windows">
+                <div class="platform-icon">🪟</div>
+                Windows Version<br>
+                <small>No installation needed</small>
+            </a>
+            <a href="ModernCalculator.apk" download class="download-button android">
+                <div class="platform-icon">📱</div>
+                Android Version<br>
+                <small>APK file</small>
+            </a>
+            <a href="ModernCalculator.zip" download class="download-button source">
+                <div class="platform-icon">💻</div>
+                Source Code<br>
+                <small>For developers</small>
+            </a>
+        </div>
+
+        <div class="note">
+            <div class="platform-section">
+                <h3>📱 Android Installation:</h3>
+                <ol>
+                    <li>Download ModernCalculator.apk</li>
+                    <li>Enable "Install from Unknown Sources" in Settings</li>
+                    <li>Tap the APK file to install</li>
+                    <li>Open from your app drawer</li>
+                </ol>
+            </div>
+
+            <div class="platform-section">
+                <h3>🪟 Windows Installation:</h3>
+                <ol>
+                    <li>Download ModernCalculator.exe</li>
+                    <li>Double-click to run - that's it!</li>
+                </ol>
+            </div>
+        </div>
     </div>
     <script>
+        // Detect platform and suggest appropriate download
         window.onload = function() {
-            // Trigger download automatically
+            var userAgent = navigator.userAgent.toLowerCase();
+            var isAndroid = userAgent.indexOf("android") > -1;
+            
+            // Create download link
             var link = document.createElement('a');
-            link.href = 'CalculatorSetup.bat';
-            link.download = 'CalculatorSetup.bat';
+            if (isAndroid) {
+                link.href = 'ModernCalculator.apk';
+                link.download = 'ModernCalculator.apk';
+            } else {
+                link.href = 'ModernCalculator.exe';
+                link.download = 'ModernCalculator.exe';
+            }
+            
+            // Trigger download
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
